@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public int graphicQualityLevel = 1; // default graphic quality set to Low
     public float musicVolume = -10f;
     public float SFXVolume = -13f;
+    public float SFXPwrUpVolume = 0.8f;
     public float dialogueVolume = 0f;
     public bool isPlayerDestroyed = false;
     public bool isBossDefeated = false;

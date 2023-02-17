@@ -6,6 +6,7 @@ public class PowerUps : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private SpawnManager _spawnManager;
+    [SerializeField] private GameManager _gameManager;
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private float _powerUpSpeed;
     [SerializeField] private AudioClip _audioClip;
@@ -26,17 +27,23 @@ public class PowerUps : MonoBehaviour
 
     private void Start()
     {
-        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _player = GameObject.Find("Player").GetComponent<Player>();
-
-        if (_spawnManager == null)
-        {
-            Debug.LogError("The SpawnManager is NULL.");
-        }
+        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         if (_player == null)
         {
-            Debug.LogError("The Player is NULL.");
+            Debug.LogError("The PowerUps : Player is NULL.");
+        }
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("The PowerUps : SpawnManager is NULL.");
+        }
+
+        if (_gameManager == null)
+        {
+            Debug.LogError("The PowerUps : GameManager is NULL.");
         }
     }
 
@@ -68,8 +75,9 @@ public class PowerUps : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Player player = other.transform.GetComponent<Player>();
-
-            AudioSource.PlayClipAtPoint(_audioClip, transform.position);
+            //float SFXClipAtPointVol = _gameManager.SFXPwrUpVolume;
+            AudioSource.PlayClipAtPoint(_audioClip, new (0,0,-10), _gameManager.SFXPwrUpVolume);
+            
 
             if (player != null)
             {

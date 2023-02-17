@@ -11,19 +11,17 @@ public class SceneManager_MainMenu : MonoBehaviour
     {
 
         _fadeEffect = GameObject.Find("CanvasFader").GetComponent<FadeEffect>();
-
-
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
         if (_gameManager == null)
         {
             Debug.LogError("The Game Manager is null.");
         }
 
-        
-                if (_fadeEffect == null)
-                {
-                    Debug.Log("FadeEffect is NULL.");
-                }
+        if (_fadeEffect == null)
+        {
+            Debug.Log("FadeEffect is NULL.");
+        }
         /*
                 if (_gameManager.comingFromInstructionsScene == true)
                 {
@@ -53,16 +51,21 @@ public class SceneManager_MainMenu : MonoBehaviour
             _fadeEffect.FadeOut();
             StartCoroutine(LoadOptionsDelay());
         }
-
-        if (Input.GetKeyDown(KeyCode.X))
+        */
+        if (Input.GetKeyDown(KeyCode.X)) // temp Quit to OS
         {
             _fadeEffect.FadeOut();
-            FadeOutToCredits();
+            QuitToOS();
         }
-        */
     }
 
-    
+    public void QuitToOS()
+    {
+        Application.Quit();
+
+    }
+
+
     public void FadeOutToGameScene() // Fades out and loads a new game at the default difficulty level (Rookie)
                                      // or to whichever difficulty level was set in the options scene.
     {

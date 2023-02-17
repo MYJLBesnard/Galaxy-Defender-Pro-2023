@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - LaserEnemy
+  - LaserPlayer
+  - Enemy
+  - PowerUpsHealth
+  - PowerUpsBasic
+  - Asteroid
   layers:
   - Default
   - TransparentFX
@@ -40,4 +46,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1874937755
+    locked: 0
+  - name: Foreground
+    uniqueID: 4171997781
     locked: 0
