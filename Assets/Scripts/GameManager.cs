@@ -11,7 +11,7 @@ public class LevelInfo // Contains the game settings for a given level of the ga
     public int LevelNumber = 1;  // Number of Level
     public string Name = null;  // Name of the Level
     public int SizeOfWave = 10;  // How many enemy ships in the wave
-    public float PowerUpSpeed = 0.5f; // Default speed of Power Ups
+    public float PowerUpSpeed = 3.5f; // Default speed of Power Ups
     public float PlayerLaserSpeed = 8.0f; // Default speed of Player's laser
 
     public float EnemySpeed = 5.0f;    // Default speed of Enemy ships(seconds)
@@ -37,7 +37,9 @@ public class GameManager : MonoBehaviour
     public int graphicQualityLevel = 1; // default graphic quality set to Low
     public float musicVolume = -10f;
     public float SFXVolume = -13f;
+
     public float SFXPwrUpVolume = 0.8f;
+
     public float dialogueVolume = 0f;
     public bool isPlayerDestroyed = false;
     public bool isBossDefeated = false;

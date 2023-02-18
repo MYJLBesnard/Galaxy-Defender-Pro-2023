@@ -64,7 +64,8 @@ public class StartGameAsteroid : MonoBehaviour
         {
             if (_spawnManager.asteroidHit == false)
             {
-                _spawnManager.asteroidHit = true; // prevents second (or multi shot) player laser to be detected.  Only the first trigger gets reported.
+                //_spawnManager.asteroidHit = true; // prevents second (or multi shot) player laser to be detected.  Only the first trigger gets reported.
+                _spawnManager.StartGameAsteroidDestroyed();
                 GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
                 explosion.transform.parent = _spawnManager.explosionContainer.transform;
 

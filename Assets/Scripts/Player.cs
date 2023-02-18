@@ -44,8 +44,9 @@ public class Player : MonoBehaviour
 
     [Header("Speed Variables")]
     [SerializeField] private float _playerSpeed = 5.0f;
-    [SerializeField] private bool _isPlayerSpeedBoostActive = false;
     [SerializeField] private float _speedMultiplier = 1.75f;
+    //[SerializeField] private bool _
+    [SerializeField] private bool _isPlayerSpeedBoostActive = false;
 
     [Header("Shields / Damage Variables")]
     [SerializeField] private bool _isPlayerShieldsActive = false;
@@ -54,6 +55,10 @@ public class Player : MonoBehaviour
     private GameObject[] _playerDamage;
     [SerializeField] private List<GameObject> poolDamageAnimations = new List<GameObject>();
     [SerializeField] private List<GameObject> activatedDamageAnimations = new List<GameObject>();
+
+    [Header("Thruster Core Variables")]
+    public bool canPlayerUseThrusters = true; // default is false in original code
+
 
     [Header("Inspector assigned")]
     [SerializeField] private int _playerLives = 3;
@@ -120,6 +125,8 @@ public class Player : MonoBehaviour
     void Update()
     {
         PlayerMovement();
+        CalculateThrustersScale();
+
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _wpnReadyToFire)
         {
@@ -168,6 +175,53 @@ public class Player : MonoBehaviour
         Debug.Log("Incoming Wave!...");
         _spawnManager.StartSpawning();
     }
+
+
+
+
+    // Player Thrusters Logic
+    void CalculateThrustersScale()
+    {
+        //if (Input.GetKey(KeyCode.LeftShift) && _hasPlayerThrustersCooledDown && canPlayerUseThrusters)
+        if (Input.GetKey(KeyCode.LeftShift) && canPlayerUseThrusters)
+        {
+                //PlayerThrustersActivate(5);
+            PlayerThrustersActivate();
+
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            PlayerThrustersDeactivate();
+        }
+    }
+
+    //void PlayerThrustersActivate(int coreTempIncrease)
+            void PlayerThrustersActivate()
+
+    {
+        /*
+        currentCoreTemp += coreTempIncrease;
+        thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
+        if (currentCoreTemp > maxCoreTemp)
+        {
+            currentCoreTemp = maxCoreTemp;
+        }
+        */
+
+        _playerSpeed = 10.0f;
+    }
+
+    void PlayerThrustersDeactivate()
+    {
+        _playerSpeed = 5.0f;
+
+        if (_isPlayerSpeedBoostActive == true)
+        {
+            _playerSpeed *= _speedMultiplier;
+        }
+    }
+
 
 
 

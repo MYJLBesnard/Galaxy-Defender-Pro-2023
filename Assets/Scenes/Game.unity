@@ -388,7 +388,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: a45d21c30e0154a9ca1a5d6fb2bf3cfa, type: 3}
-  m_Color: {r: 0, g: 0.99215686, b: 0.99215686, a: 1}
+  m_Color: {r: 0.9150943, g: 0.91482025, b: 0.17697577, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
@@ -584,8 +584,8 @@ MonoBehaviour:
   _numberOfProjectiles: 3
   _spreadAngle: 30
   _playerSpeed: 8
-  _isPlayerSpeedBoostActive: 0
   _speedMultiplier: 1.75
+  _isPlayerSpeedBoostActive: 0
   _isPlayerShieldsActive: 0
   _shieldHits: 0
   _playerShieldAlpha: 1
@@ -599,6 +599,7 @@ MonoBehaviour:
   - {fileID: 632589812}
   - {fileID: 1438695244}
   activatedDamageAnimations: []
+  canPlayerUseThrusters: 1
   _playerLives: 3
   isPlayerAlive: 1
   _playerScore: 0
@@ -926,6 +927,55 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!1 &490838691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 490838693}
+  - component: {fileID: 490838692}
+  m_Layer: 6
+  m_Name: PostProcessingVolume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &490838692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490838691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 11400000, guid: 4e5eb3317ad074f1d9785f181f92c39a, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 0
+--- !u!4 &490838693
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490838691}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &532623794
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,6 +1471,7 @@ MonoBehaviour:
   graphicQualityLevel: 1
   musicVolume: -10
   SFXVolume: -13
+  SFXPwrUpVolume: 0.8
   dialogueVolume: 0
   isPlayerDestroyed: 0
   isBossDefeated: 0
@@ -1665,7 +1716,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &727661141
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2113,6 +2164,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 963194228}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 0
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 0
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 0
+  m_ShowCustomSorter: 0
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
 --- !u!1 &1032366508
 GameObject:
   m_ObjectHideFlags: 0
@@ -2286,50 +2385,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!1 &1305624658
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1305624660}
-  - component: {fileID: 1305624659}
-  m_Layer: 6
-  m_Name: PostProcessingVolume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1305624659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1305624658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1305624660
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1305624658}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1362947238
 GameObject:
   m_ObjectHideFlags: 0
@@ -2360,7 +2415,7 @@ Transform:
   m_Children:
   - {fileID: 138531115}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1438695244
 GameObject:
@@ -2540,8 +2595,6 @@ MonoBehaviour:
   _player: {fileID: 0}
   player: {fileID: 387276262}
   depletedLateralLaserCanons: {fileID: 0}
-  radius: 13
-  spawnRate: 1
   playerLaserContainer: {fileID: 164476615}
   powerUpContainer: {fileID: 588032941}
   enemyContainer: {fileID: 62080896}
@@ -2555,6 +2608,7 @@ MonoBehaviour:
   _healthAndNegPowerUps:
   - {fileID: 4147599875351945155, guid: 67fd3c0a78f3a4e118cd98d3892df85b, type: 3}
   _enemyPrefab: {fileID: 9156576317700163515, guid: d4f3190ebb25246049082d1e7c676ff8, type: 3}
+  _typeOfEnemy: {fileID: 0}
   _typesOfEnemy:
   - {fileID: 9156576317700163515, guid: d4f3190ebb25246049082d1e7c676ff8, type: 3}
   _enemiesInWave: 10
@@ -2567,10 +2621,10 @@ MonoBehaviour:
   _stopSpawningPlayerPwrUp: 0
   _warningIncomingWave: {fileID: 0}
   _attackWaveRepelled: {fileID: 0}
-  powerUpSpeed: 3.5
   waveCurrent: 0
   enemyType: 0
-  asteroidHit: 0
+  _asteroidHit: 0
+  _radius: 13
 --- !u!4 &1465745205
 Transform:
   m_ObjectHideFlags: 0
@@ -2637,6 +2691,7 @@ GameObject:
   - component: {fileID: 1572358549}
   - component: {fileID: 1572358551}
   - component: {fileID: 1572358550}
+  - component: {fileID: 1572358552}
   m_Layer: 0
   m_Name: PlayerThrustersRight
   m_TagString: Untagged
@@ -2701,7 +2756,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: a45d21c30e0154a9ca1a5d6fb2bf3cfa, type: 3}
-  m_Color: {r: 0, g: 0.990566, b: 0.990566, a: 1}
+  m_Color: {r: 0.8962264, g: 0.7699938, b: 0.6552599, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2731,6 +2786,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &1572358552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572358548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58e147f9b0c842fb8f87b5a512b73ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 0}
 --- !u!1 &1633910970
 GameObject:
   m_ObjectHideFlags: 0
@@ -3092,7 +3160,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: a45d21c30e0154a9ca1a5d6fb2bf3cfa, type: 3}
-  m_Color: {r: 0, g: 0.990566, b: 0.990566, a: 1}
+  m_Color: {r: 0.9150943, g: 0.91482025, b: 0.17697577, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3315,6 +3383,7 @@ GameObject:
   - component: {fileID: 1983015678}
   - component: {fileID: 1983015680}
   - component: {fileID: 1983015679}
+  - component: {fileID: 1983015681}
   m_Layer: 0
   m_Name: PlayerThrustersLeft
   m_TagString: Untagged
@@ -3379,7 +3448,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: a45d21c30e0154a9ca1a5d6fb2bf3cfa, type: 3}
-  m_Color: {r: 0, g: 0.99215686, b: 0.99215686, a: 1}
+  m_Color: {r: 0.8962264, g: 0.7699938, b: 0.6552599, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
@@ -3409,6 +3478,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &1983015681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983015677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58e147f9b0c842fb8f87b5a512b73ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 0}
 --- !u!1 &2017351763
 GameObject:
   m_ObjectHideFlags: 0

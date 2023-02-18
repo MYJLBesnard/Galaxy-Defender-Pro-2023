@@ -58,7 +58,7 @@ public class PowerUps : MonoBehaviour
     // ----------------------------------------------------------------------------
     void Movement()
     {
-        _powerUpSpeed = _spawnManager.powerUpSpeed;
+        _powerUpSpeed = _gameManager.currentPowerUpSpeed;
         transform.Translate(_powerUpSpeed * Time.deltaTime * Vector3.down);
 
         if (transform.position.y < -9.0F)

@@ -10,10 +10,10 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private Player _player;
 
     public Transform player;
-    public GameObject depletedLateralLaserCanons;
+    [SerializeField] private GameObject depletedLateralLaserCanons; //*********
 
-    public float radius = 13f;
-    public float spawnRate = 5.0f;
+    //public float radius = 13f;
+    //public float spawnRate = 5.0f;
 
     private float _xPos;
     private float _yPos;
@@ -27,14 +27,14 @@ public class SpawnManager : MonoBehaviour
     public GameObject explosionContainer;
 
     [Header("Power Up Related")]
-    public GameObject[] _playerBasicPowerUps;
-    public GameObject[] _playerWeaponsPowerUps;
-    public GameObject[] _healthAndNegPowerUps;
+    [SerializeField] private GameObject[] _playerBasicPowerUps; //*********
+    [SerializeField] private GameObject[] _playerWeaponsPowerUps; //*********
+    [SerializeField] private GameObject[] _healthAndNegPowerUps; //*********
 
     [Header("Enemy Related")]
     [SerializeField] private GameObject _enemyPrefab;
-    private GameObject _typeOfEnemy;
-    public GameObject[] _typesOfEnemy;
+    [SerializeField] private GameObject _typeOfEnemy; //*********
+    [SerializeField] private GameObject[] _typesOfEnemy; //*********
     [SerializeField] private int _enemiesInWave = 15;
     [SerializeField] private int _enemiesSpawnedInWave = 0;
     public int totalEnemyShipsDestroyed = 0;
@@ -49,15 +49,19 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private AudioClip _warningIncomingWave;
     [SerializeField] private AudioClip _attackWaveRepelled;
 
-
-    public float powerUpSpeed = 3.5f;
+    //[SerializeField] private float _powerUpSpeed = 13f;
+    //public float powerUpSpeed { get { return _powerUpSpeed; } }
 
     public int waveCurrent = 0;
     private int _shipsInWave = 0;
     public int enemyType = 0;
     private float _triggerMineLayer = 0f;
 
-    public bool asteroidHit = false;
+    [SerializeField] private bool _asteroidHit = false;
+    public bool asteroidHit { get { return _asteroidHit; } }
+
+    [SerializeField] private float _radius = 13f;
+    public float radius { get { return _radius; } }
 
 
     void Start()
@@ -68,7 +72,7 @@ public class SpawnManager : MonoBehaviour
 
         if (_gameManager == null)
         {
-            Debug.LogError("The Game Manager is null.");
+            Debug.LogError("The SpawnManager : Game Manager is null.");
         }
 
         if (_uiManager == null)
@@ -78,14 +82,19 @@ public class SpawnManager : MonoBehaviour
 
         if (_player == null)
         {
-            Debug.LogError("The Player is null in the SpawnManager..");
+            Debug.LogError("The SpawnManager : Player is null.");
         }
 
         waveCurrent = _gameManager.currentWave;
         Debug.Log("Current Wave capture from Start(): " + waveCurrent);
     }
 
-    public void EnemyShipsDestroyedCounter()
+    public void StartGameAsteroidDestroyed()
+    {
+            _asteroidHit = true;
+    }
+
+public void EnemyShipsDestroyedCounter()
     {
         totalEnemyShipsDestroyed++;
 
