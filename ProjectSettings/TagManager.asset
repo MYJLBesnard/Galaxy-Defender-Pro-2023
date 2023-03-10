@@ -10,6 +10,8 @@ TagManager:
   - PowerUpsHealth
   - PowerUpsBasic
   - Asteroid
+  - PlayerPowerUps
+  - PowerUpsWeapons
   layers:
   - Default
   - TransparentFX

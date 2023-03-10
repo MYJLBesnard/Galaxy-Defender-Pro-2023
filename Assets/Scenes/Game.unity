@@ -6443,6 +6443,7 @@ MonoBehaviour:
   _uiManager: {fileID: 0}
   _spawnManager: {fileID: 0}
   _gameManager: {fileID: 0}
+  _camera: {fileID: 0}
   _endOfLevelDialogue: {fileID: 0}
   _isPlayerInPosition: 0
   _isAsteroidDestroyed: 0
@@ -6517,7 +6518,6 @@ MonoBehaviour:
   _playerDoubleShotLaserPrefab: {fileID: 3841857477110957510, guid: 7fbbdda50cf2540d89d22a05ac426149, type: 3}
   _playerMultiShotLaserPrefab: {fileID: 1874895850706012735, guid: 93ff48dba1bae4a78a39baebdecde63e, type: 3}
   _playerLateralLaserPrefab: {fileID: 1949508794438214162, guid: 0e4b3046c65984517bcf8a68f5866304, type: 3}
-  playerLaserContainer: {fileID: 164476615}
   _playerShield: {fileID: 873739422}
   _playerHealthPowerUpPrefab: {fileID: 4147599875351945155, guid: 67fd3c0a78f3a4e118cd98d3892df85b, type: 3}
   _playerThrusterLeft: {fileID: 1983015677}
@@ -6527,6 +6527,7 @@ MonoBehaviour:
   _lateralLaserCanonLeft: {fileID: 966124175}
   _lateralLaserCanonRight: {fileID: 2114869159}
   _bigExplosionPrefab: {fileID: 3249331152572962051, guid: 4dfa62ff5f33745cdae21ce32ac04031, type: 3}
+  playerLaserContainer: {fileID: 164476615}
   enemyBoss: {fileID: 0}
 --- !u!212 &387276261
 SpriteRenderer:
@@ -7835,7 +7836,7 @@ MonoBehaviour:
   - LevelNumber: 0
     Name: Rookie
     SizeOfWave: 8
-    PowerUpSpeed: 2
+    PowerUpSpeed: 2.5
     PlayerLaserSpeed: 8
     EnemySpeed: 0
     EnemyLaserSpeed: 6
@@ -15009,6 +15010,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1362947239}
+  - component: {fileID: 1362947240}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -15032,6 +15034,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1362947240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362947238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af38a5c73f87d489ba3f32a884f1f794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioSource: {fileID: 0}
+  _powerupAudioClip: {fileID: 0}
+  _asteroidBlockingSensors: {fileID: 0}
+  _warningIncomingWave: {fileID: 0}
+  _playerLaserShotAudioClip: {fileID: 0}
+  _warningCoreTempCritical: {fileID: 0}
+  _warningCoreTempExceeded: {fileID: 0}
+  _coreTempNominal: {fileID: 0}
+  _playerShields100AudioClip: {fileID: 0}
+  _playerShields65AudioClip: {fileID: 0}
+  _playerShields35AudioClip: {fileID: 0}
+  _playerShieldsDepletedAudioClip: {fileID: 0}
+  _shipRepairsUnderwayAudioClip: {fileID: 0}
+  _explosionSoundEffect: {fileID: 0}
+  _speedBoostCollected: {fileID: 0}
+  _multiShotCollected: {fileID: 0}
+  _ammunitionCollected: {fileID: 0}
+  _homingMissilesCollected: {fileID: 0}
+  _lateralLaserCollected: {fileID: 0}
 --- !u!1 &1392420157
 GameObject:
   m_ObjectHideFlags: 0
@@ -20262,7 +20295,7 @@ MonoBehaviour:
   _uiManager: {fileID: 0}
   _player: {fileID: 0}
   player: {fileID: 387276262}
-  _depletedLateralLaserCanons: {fileID: 2075782326843701816, guid: 69f0dca04bf1846ae8c1bd1f72d04347, type: 3}
+  DepletedLateralLaserCanons: {fileID: 2075782326843701816, guid: 69f0dca04bf1846ae8c1bd1f72d04347, type: 3}
   playerLaserContainer: {fileID: 164476615}
   powerUpContainer: {fileID: 588032941}
   enemyContainer: {fileID: 62080896}
