@@ -41,11 +41,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -3818998065117687336, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -3818998065117687336, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -3818998065117687336, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_SortingLayerID
@@ -95,6 +95,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+      propertyPath: m_Size.x
+      value: 0.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.56
+      objectReference: {fileID: 0}
     - target: {fileID: 3706751858339364516, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_Name
       value: PlayerBasicLaser (1)
@@ -119,7 +131,9 @@ PrefabInstance:
       propertyPath: _enemyLaserBasicAudioClip
       value: 
       objectReference: {fileID: 8300000, guid: 9fab0a61942bd40e9a8a8eaaed25544a, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7178522926575947559, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+    - {fileID: 5411216111760713405, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
 --- !u!4 &1930700648844329512 stripped
 Transform:

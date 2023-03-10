@@ -59,8 +59,8 @@ MonoBehaviour:
   _isEnemyArcLaser: 0
   _playSound: 1
   _audioSource: {fileID: 0}
-  _playerLaserAudioClip: {fileID: 8300000, guid: 9fab0a61942bd40e9a8a8eaaed25544a, type: 3}
-  _enemyLaserBasicAudioClip: {fileID: 8300000, guid: 9fab0a61942bd40e9a8a8eaaed25544a, type: 3}
+  _playerLaserAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  _enemyLaserBasicAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
 --- !u!1001 &188905282484299814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -70,11 +70,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -3818998065117687336, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -3818998065117687336, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -3818998065117687336, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_SortingLayerID
@@ -129,8 +129,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+      propertyPath: m_Size.x
+      value: 0.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+      propertyPath: m_Size.y
+      value: 2.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.64
       objectReference: {fileID: 0}
     - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_IsTrigger
@@ -172,7 +188,10 @@ PrefabInstance:
       propertyPath: _enemyLaserBasicAudioClip
       value: 
       objectReference: {fileID: 8300000, guid: 9fab0a61942bd40e9a8a8eaaed25544a, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7178522926575947559, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+    - {fileID: 5411216111760713405, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+    - {fileID: 518088237884291963, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
 --- !u!4 &895929408940224495 stripped
 Transform:
@@ -289,11 +308,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -3818998065117687336, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -3818998065117687336, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -3818998065117687336, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_SortingLayerID
@@ -349,11 +368,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_Size.x
-      value: 0.32846797
+      value: 0.54
       objectReference: {fileID: 0}
     - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_Offset.x
-      value: -0.010573678
+      value: -0.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464315811966141996, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.64
       objectReference: {fileID: 0}
     - target: {fileID: 3706751858339364516, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
       propertyPath: m_Name
@@ -391,7 +414,10 @@ PrefabInstance:
       propertyPath: _enemyLaserBasicAudioClip
       value: 
       objectReference: {fileID: 8300000, guid: 9fab0a61942bd40e9a8a8eaaed25544a, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7178522926575947559, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+    - {fileID: 518088237884291963, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
+    - {fileID: 5411216111760713405, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8a9fbc04b1a864569a040ff4f769f3ba, type: 3}
 --- !u!4 &4701435925634512138 stripped
 Transform:

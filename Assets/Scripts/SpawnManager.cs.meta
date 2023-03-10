@@ -3,7 +3,21 @@ guid: 0749677621d19422aa07fe38572435c6
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _gameManager: {instanceID: 0}
+  - _uiManager: {instanceID: 0}
+  - _player: {instanceID: 0}
+  - player: {instanceID: 0}
+  - depletedLateralLaserCanons: {instanceID: 0}
+  - playerLaserContainer: {instanceID: 0}
+  - powerUpContainer: {instanceID: 0}
+  - enemyContainer: {instanceID: 0}
+  - enemyLaserContainer: {instanceID: 0}
+  - explosionContainer: {instanceID: 0}
+  - _enemyPrefab: {instanceID: 0}
+  - _typeOfEnemy: {instanceID: 0}
+  - _warningIncomingWave: {fileID: 8300000, guid: bce339e76e92b4a61bf852a98c4cde86, type: 3}
+  - _attackWaveRepelled: {fileID: 8300000, guid: 278e06b136ce64005b88b88532bc6a14, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

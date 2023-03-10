@@ -12,7 +12,6 @@ public class Enemy_Basic : MonoBehaviour
     [SerializeField] private AudioSource _audioSource;
 
     [SerializeField] private float _enemySpeed;
-    [SerializeField] private float _enemyLaserSpeed;
     [SerializeField] private float _xPos = 0;
     [SerializeField] private Animator _animEnemyDestroyed;
     [SerializeField] private GameObject _enemyPrefab;
@@ -75,15 +74,13 @@ public class Enemy_Basic : MonoBehaviour
         if (Time.time > _wpnReadyToFire && _enemyDestroyed == false)
 
         {
-            _enemyLaserSpeed = _gameManager.currentEnemyLaserSpeed;
             _enemyRateOfFire = _gameManager.currentEnemyRateOfFire;
-            _wpnReadyToFire = Time.time + _enemyRateOfFire;
+            _wpnReadyToFire = Time.time + (_enemyRateOfFire * Random.Range(1f, 3f));
 
             if (_gameManager.currentEnemyRateOfFire != 0)
             {  
-                Vector3 laserPx = _enemyPrefab.transform.position;
+                Vector3 laserPx = new(_enemyPrefab.transform.position.x, _enemyPrefab.transform.position.y - 0.35f, _enemyPrefab.transform.position.z);
                 GameObject enemyLaser = Instantiate(_enemyBasicLaser, laserPx, transform.rotation);
-
                 enemyLaser.transform.parent = _spawnManager.enemyLaserContainer.transform;    
             }        
         }
@@ -91,7 +88,6 @@ public class Enemy_Basic : MonoBehaviour
 
     void EnemyMovement()
     {
-
         _enemySpeed = _gameManager.currentEnemySpeed;
 
 
@@ -164,27 +160,21 @@ public class Enemy_Basic : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.name == "Player")
+        if (other.gameObject.tag == "Player")
         {
-            Debug.Log("Enemy collided with Player!");
-
             if (other.transform.TryGetComponent<Player>(out var player))
             {
                 player.Damage();
             }
-
+            Debug.Log("Enemy_Basic : Player hit Enemy ship...");
             PlayClip(_explosionAudioClip);
-
             DestroyEnemyShip();
         }
 
         if (other.gameObject.tag == "LaserPlayer")
         {
-            Debug.Log("Player laser has collided with Enemy!");
             Destroy(other.gameObject);
-
             PlayClip(_explosionAudioClip);
-
             DestroyEnemyShip();
             _playerScript.AddScore(10);
         }
@@ -193,12 +183,22 @@ public class Enemy_Basic : MonoBehaviour
     private void DestroyEnemyShip()
     {
         _enemyDestroyed = true;
+
         //Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
         _animEnemyDestroyed.SetTrigger("OnEnemyBasicDeath");
         _spawnManager.EnemyShipsDestroyedCounter();
-        _thrusters.SetActive(false);
+        StartCoroutine(TurnOffThrusters());
+
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<BoxCollider2D>());
         Destroy(this.gameObject, 2.8f);
     }
+
+
+    IEnumerator TurnOffThrusters()
+    {
+        yield return new WaitForSeconds(0.5f);
+        _thrusters.SetActive(false);
+    }
+
 }

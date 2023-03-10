@@ -10,7 +10,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private Player _player;
 
     public Transform player;
-    [SerializeField] private GameObject depletedLateralLaserCanons; //*********
+    public GameObject DepletedLateralLaserCanons; //*********
 
     //public float radius = 13f;
     //public float spawnRate = 5.0f;
@@ -86,7 +86,6 @@ public class SpawnManager : MonoBehaviour
         }
 
         waveCurrent = _gameManager.currentWave;
-        Debug.Log("Current Wave capture from Start(): " + waveCurrent);
     }
 
     public void StartGameAsteroidDestroyed()
@@ -133,6 +132,7 @@ public void EnemyShipsDestroyedCounter()
     {
         StartCoroutine(SpawnEnemyWave());
         StartCoroutine(SpawnBasicPowerUps());
+        StartCoroutine(SpawnWeaponsPowerUps());
         StartCoroutine(SpawnHealthAndNegPowerUps());
     }
 
@@ -238,6 +238,20 @@ public void EnemyShipsDestroyedCounter()
             Vector3 pxToSpawn = new Vector3(Random.Range(-9f, 9f), 8f, 0);
             int randomPowerUp = Random.Range(0, _playerBasicPowerUps.Length); // spawn Power Ups Elements 0 to Length of Array
             GameObject newPowerUp = Instantiate(_playerBasicPowerUps[randomPowerUp], pxToSpawn, Quaternion.identity);
+            newPowerUp.transform.parent = powerUpContainer.transform;
+
+            yield return new WaitForSeconds(Random.Range(2f, 5f)); // original figures were 15f & 25f
+        }
+    }
+
+    IEnumerator SpawnWeaponsPowerUps()
+    {
+        yield return new WaitForSeconds(2.0f);
+        while (_stopSpawning != true)
+        {
+            Vector3 pxToSpawn = new Vector3(Random.Range(-9f, 9f), 8f, 0);
+            int randomPowerUp = Random.Range(0, _playerWeaponsPowerUps.Length); // spawn Power Ups Elements 0 to Length of Array
+            GameObject newPowerUp = Instantiate(_playerWeaponsPowerUps[randomPowerUp], pxToSpawn, Quaternion.identity);
             newPowerUp.transform.parent = powerUpContainer.transform;
 
             yield return new WaitForSeconds(Random.Range(2f, 5f)); // original figures were 15f & 25f

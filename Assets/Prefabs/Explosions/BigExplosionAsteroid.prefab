@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 0}
-  _explosionAudioClip: {fileID: 8300000, guid: 1f8c9c3f8c70a4b998347a27ce4f7c89, type: 3}
+  _explosionAudioClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
 --- !u!82 &1853465474182061182
 AudioSource:
   m_ObjectHideFlags: 0

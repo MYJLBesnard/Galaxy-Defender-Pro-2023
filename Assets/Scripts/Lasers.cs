@@ -191,12 +191,10 @@ public class Lasers : MonoBehaviour
             CleanUpContainers();
         }
 
-        /*
         if (other.CompareTag("PowerUpsWeapons") && _isEnemyLaser == true || other.CompareTag("PowerUpsWeapons") && _isEnemyRearShootingLaser == true)
         {
             CleanUpContainers();
         }
-        */
 
         if (other.CompareTag("Player") && _isEnemyArcLaser == true)
         {
@@ -236,12 +234,10 @@ public class Lasers : MonoBehaviour
             CleanUpContainers();
         }
 
-        /*
         if (other.CompareTag("PowerUpsWeapons") && _isPlayerLaser == true || other.CompareTag("PowerUpsWeapons") && _isPlayerLateralLaser == true)
         {
             CleanUpContainers();
         }
-        */
 
         if (other.CompareTag("Asteroid") && _isPlayerLaser == true || other.CompareTag("Asteroid") && _isPlayerLateralLaser == true)
         {
