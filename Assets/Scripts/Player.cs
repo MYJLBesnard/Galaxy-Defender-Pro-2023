@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public bool normalEnemyMovement = true;
+    //public bool normalEnemyMovement = true;
     [SerializeField] private float _playerRotateSpeed = 20.0f;
 
     //private FadeEffect _fadeEffect;
@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField] private SpawnManager _spawnManager;
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private CameraShaker _camera;
-    [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
+    [SerializeField] private AudioManager _audioManager;
 
     [SerializeField] private bool _isPlayerInPosition = false;
     [SerializeField] private bool _isAsteroidDestroyed = false;
@@ -21,33 +21,11 @@ public class Player : MonoBehaviour
     [SerializeField] private bool _isPlayerMultiShotActive = false;
     [SerializeField] private bool _isPlayerLateralLaserActive = false;
 
-
-    [Header("AudioClips")]
-    [SerializeField] private AudioSource _audioSource;
-    [SerializeField] private AudioClip _powerupAudioClip;
-    [SerializeField] private AudioClip _asteroidBlockingSensors;
-    [SerializeField] private AudioClip _warningIncomingWave;
-    [SerializeField] private AudioClip _playerLaserShotAudioClip;
-    [SerializeField] private AudioClip _warningCoreTempCritical;
-    [SerializeField] private AudioClip _warningCoreTempExceeded;
-    [SerializeField] private AudioClip _coreTempNominal;
-    [SerializeField] private AudioClip _playerShields100AudioClip;
-    [SerializeField] private AudioClip _playerShields65AudioClip;
-    [SerializeField] private AudioClip _playerShields35AudioClip;
-    [SerializeField] private AudioClip _playerShieldsDepletedAudioClip;
-    [SerializeField] private AudioClip _shipRepairsUnderwayAudioClip;
-    [SerializeField] private AudioClip _explosionSoundEffect;
-
-    [SerializeField] private AudioClip _speedBoostCollected;
-    [SerializeField] private AudioClip _multiShotCollected;
-    [SerializeField] private AudioClip _ammunitionCollected;
-    [SerializeField] private AudioClip _homingMissilesCollected;
-    [SerializeField] private AudioClip _lateralLaserCollected;
-
-
     [Header("First Start / New Game Variables")]
     [SerializeField] private int _ammoCount = 20;
+    [SerializeField] private int _maxAmmoStores = 25;
     [SerializeField] private int _homingMissileCount = 20;
+    [SerializeField] private int _maxMissileStores = 25;
     [SerializeField] private bool _gameFirstStart = true;
     public int newGamePowerUpCollected = 0;
 
@@ -55,6 +33,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float _wpnCoolDown;
     [SerializeField] private float _wpnReadyToFire;
     [SerializeField] private float _playerRateOfFire = 0.15f;
+
+    [Header("Homing Missile Variables")]
+    [SerializeField] private GameObject _playerHomingMissilePrefab;
+    [SerializeField] private bool _isPlayerHomingMissilesActivate = false;
 
     [Header("Multi Shot Variables")]
     [SerializeField] private int _numberOfProjectiles = 3;
@@ -86,14 +68,14 @@ public class Player : MonoBehaviour
 
     [Header("Tractor Beam Variables")]
     [SerializeField] private GameObject _tractorBeam;
-    //public TractorBeam tractorBeam;
+    [SerializeField] private bool _canPlayerUseTractorBeam;
+    [SerializeField] private bool _isTractorBeamOn = false;
+    public TractorBeam tractorBeam;
     public int minTractorBeam = 0;
     public int maxTractorBeam = 1000;
     public int currentTractorBeam = 1000;
-    [SerializeField] private bool _canPlayerUseTractorBeam;
-    [SerializeField] private bool _isTractorBeamOn = false;
+    [SerializeField] private float _scaleChangeRate;
     private Vector3 _scaleChange; // scale of Tractor Beam
-
 
     [Header("Inspector assigned")]
     [SerializeField] private int _playerLives = 3;
@@ -110,7 +92,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _playerMultiShotLaserPrefab;
     [SerializeField] private GameObject _playerLateralLaserPrefab;
 
-    [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
+    [SerializeField] private GameObject _playerShield;
     [SerializeField] private GameObject _playerThrusterLeft, _playerThrusterRight;
     [SerializeField] private GameObject _playerNoseThrusterLeft, _playerNoseThrusterRight;
     [SerializeField] private GameObject _lateralLaserCanonLeft, _lateralLaserCanonRight;
@@ -120,35 +102,36 @@ public class Player : MonoBehaviour
     public GameObject playerLaserContainer;
     public GameObject enemyBoss;
 
-    // Internals
-    private Transform _myTransform = null;                            // Cached transform component
-    private Vector3 _myPosition = Vector3.zero;                       // Current position
-    private Vector3 _startPosition = new(0.0f, -3.5f, 0.0f);
 
     void Start()
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        _audioSource = GetComponent<AudioSource>();
 
-        _scaleChange = new Vector3(-0.25f, -0.25f, -0.25f);
-        transform.position = new Vector3(0, -12, 0); // sets start px of Player 
+        _scaleChangeRate = 0.25f;
+        _scaleChange = new Vector3(4.0f, 4.0f, 4.0f);
+        transform.position = new Vector3(0f, -7.0f, 0f); // sets start px of Player 
 
         _camera = GameObject.Find("MainCamera").GetComponent<CameraShaker>();
         //_fadeEffect = GameObject.Find("CanvasFader").GetComponent<FadeEffect>();
-        _endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();
+        _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 
         currentTractorBeam = 1000;
-        //tractorBeam.SetTractorBeam(currentTractorBeam);
+        tractorBeam.SetTractorBeam(currentTractorBeam);
         _canPlayerUseTractorBeam = false;
 
         currentCoreTemp = 0;
         thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
         canPlayerUseThrusters = false;
 
+        
+        _uiManager.SetMaxAmmoCount(_maxAmmoStores);
+        _uiManager.SetMaxMissileCount(_maxMissileStores);
+
         _uiManager.UpdateAmmoCount(_ammoCount);
         _uiManager.UpdateHomingMissileCount(_homingMissileCount);
+        
 
 
         thrustersCoreTemp = GameObject.Find("ThrustersCoreTempHealthBar").GetComponent<ThrustersCoreTemp>();
@@ -173,18 +156,9 @@ public class Player : MonoBehaviour
             Debug.LogError("The CameraShaker on the Main Camera is null.");
         }
 
-        if (_audioSource == null)
+        if (_audioManager == null)
         {
-            Debug.LogError("The AudioSource on the Player is NULL!");
-        }
-        else
-        {
-            _audioSource.clip = _playerLaserShotAudioClip;
-        }
- 
-        if (_endOfLevelDialogue == null)
-        {
-            Debug.Log("Dialogue Player is NULL.");
+            Debug.Log("AudioManager is NULL!");
         }
 
         _gameManager.PlayMusic(1, 5.0f);
@@ -227,8 +201,8 @@ public class Player : MonoBehaviour
         {
             PlayerMovement(); // old script was called CalculateMovement();
             CalculateThrustersScale();
-            //ActivateTractorBeam();
-            //DeactivateTractorBeam(2);
+            ActivateTractorBeam();
+            ReplenishTractorBeam(2);
             ThrusterCoreLogic();
 
             if (_coreOnline == false)
@@ -242,7 +216,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        /*
+        
         if (Input.GetKeyDown(KeyCode.M))
         {
             if (_isPlayerHomingMissilesActivate == true && _homingMissileCount > 0)
@@ -255,9 +229,9 @@ public class Player : MonoBehaviour
         {
             _isPlayerHomingMissilesActivate = false;
         }
-        */
+        
 
-
+        /*
         if (Input.GetKeyDown(KeyCode.N)) // testing purposes only, causes waves to attack from top or 360 degrees (See SpawnManager script)
         {
             if (normalEnemyMovement == false)
@@ -269,6 +243,7 @@ public class Player : MonoBehaviour
                 normalEnemyMovement = false;
             }
         }
+        */
     }
 
     void PlayerMovement()
@@ -292,12 +267,10 @@ public class Player : MonoBehaviour
             _playerNoseThrusterRight.SetActive(true);
             Vector3 playerRotateRight = new Vector3(0, 0, -15.0f);
             transform.Rotate(_playerRotateSpeed * Time.deltaTime * playerRotateRight);
-            
         }
         else
         {
             _playerNoseThrusterRight.SetActive(false);
-
         }
 
         Vector3 playerMovement = new Vector3(playerHorizontalInput, playerVerticalInput, 0);
@@ -306,7 +279,7 @@ public class Player : MonoBehaviour
         // limits Player y-axis if Start Game Asteroid is still active
         if (_isAsteroidDestroyed == false)
         {
-            transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.7f, 1.5f), 0);
+            transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.7f, -1.0f), 0);
         }
 
         if (_isAsteroidDestroyed == true)
@@ -318,20 +291,87 @@ public class Player : MonoBehaviour
         if (transform.position.x > 11.25f)
         {
             transform.position = new Vector3(-11.25f, transform.position.y, 0);
+            //transform.position = new Vector3(6.25f, transform.position.y, 0);
+
         }
         else if (transform.position.x < -11.25f)
         {
             transform.position = new Vector3(11.25f, transform.position.y, 0);
+            //transform.position = new Vector3(-6.25f, transform.position.y, 0);
+
         }
 
-        
+
     }
+
+
+    // Tractor Beam Logic
+    void ActivateTractorBeam()
+    {
+        if (Input.GetKey(KeyCode.T)) // Turns on the Tractor Beam
+        {
+            if (_canPlayerUseTractorBeam == true && currentTractorBeam > minTractorBeam)
+            {
+                TractorBeamCollectPwrUps.IsPowrUpTractorBeamActive = true;
+                _tractorBeam.SetActive(true);
+                _isTractorBeamOn = true;
+                PlayerTractorBeamActivate(3);
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.T)) // Turns off the Tractor Beam
+        {
+            TractorBeamCollectPwrUps.IsPowrUpTractorBeamActive = false;
+            _tractorBeam.SetActive(false);
+            _isTractorBeamOn = false;
+        }
+    }
+
+    void PlayerTractorBeamActivate(int tractorBeamDecrease)
+    {
+        currentTractorBeam -= tractorBeamDecrease;
+        tractorBeam.SetTractorBeam(currentTractorBeam);
+        if (currentTractorBeam < minTractorBeam)
+        {
+            currentTractorBeam = minTractorBeam;
+
+            TractorBeamCollectPwrUps.IsPowrUpTractorBeamActive = false;
+            _tractorBeam.SetActive(false);
+            _isTractorBeamOn = false;
+        }
+
+
+        if (_isTractorBeamOn == true)
+        {
+            if (_scaleChangeRate == 0)
+            {
+                _scaleChangeRate =+ 0.1f;
+            }
+
+            _tractorBeam.transform.localScale += _scaleChange * _scaleChangeRate;
+
+            if (_tractorBeam.transform.localScale.y < 4.0f || _tractorBeam.transform.localScale.y > 40.0f)
+            {
+                _scaleChange = -_scaleChange;
+            }
+        }
+    }
+
+    void ReplenishTractorBeam(int tractorBeamIncrease) // replenish TB when T released
+    {
+        if (currentTractorBeam < maxTractorBeam)
+        {
+            currentTractorBeam += tractorBeamIncrease;
+            tractorBeam.SetTractorBeam(currentTractorBeam);
+        }
+    }
+
 
 
     // Start Asteroid Logic
     public void AsteroidBlockingSensors()
     {
-        _endOfLevelDialogue.PlayDialogueClip(_asteroidBlockingSensors);
+        _audioManager.PlayAudioClip(0); // plays Asteroid Blocking Sensors audio clip
         StartCoroutine(WeaponsFree());
     }
 
@@ -339,7 +379,7 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(4.5f);
         canPlayerUseThrusters = true;
-     //   _canPlayerUseTractorBeam = true;
+        _canPlayerUseTractorBeam = true;
         _uiManager.WeaponsFreeMsg();
     }
 
@@ -359,12 +399,10 @@ public class Player : MonoBehaviour
     IEnumerator WarningIncomingWave(float time)
     {
         yield return new WaitForSeconds(time);
-        _endOfLevelDialogue.PlayDialogueClip(_warningIncomingWave);
+        _audioManager.PlayAudioClip(1); // plays Incoming Attack Wave audio clip
+
         _spawnManager.StartSpawning();
     }
-
-
-
 
     // Player Thrusters Logic
     void CalculateThrustersScale()
@@ -445,15 +483,16 @@ public class Player : MonoBehaviour
 
     IEnumerator PlayWarningCoreTempCritical()
     {
-        _endOfLevelDialogue.PlayDialogueClip(_warningCoreTempCritical);
+        _audioManager.PlayAudioClip(3); // plays Core Temp Critical audio clip
+
         yield return new WaitForSeconds(3.0f);
         resetExceededCoreTempWarning = false;
     }
 
     IEnumerator PlayWarningCoreTempExceeded()
     {
-        _endOfLevelDialogue.StopDialogueAudio();
-        _endOfLevelDialogue.PlayDialogueClip(_warningCoreTempExceeded);
+        _audioManager.StopDialogueAudio();
+        _audioManager.PlayAudioClip(4); // plays Core Temp Exceeded audio clip
 
         yield return new WaitForSeconds(5.0f);
     }
@@ -466,7 +505,8 @@ public class Player : MonoBehaviour
 
     IEnumerator AnimateRotationTowards(Transform target, Quaternion rot, float dur)
     {
-        _endOfLevelDialogue.PlayDialogueClip(_coreTempNominal);
+        _audioManager.PlayAudioClip(5); // plays Core Temp Nominal audio clip
+
 
         float t = 0f;
         Quaternion start = target.rotation;
@@ -491,23 +531,6 @@ public class Player : MonoBehaviour
         transform.Rotate(-50f * Time.deltaTime * Vector3.forward);
     }
 
-    /*
-    IEnumerator RotatePlayerUp(Transform target, Quaternion rot, float dur)
-    {
-        float t = 0f;
-        Quaternion start = target.rotation;
-        while (t < dur)
-        {
-            target.rotation = Quaternion.Slerp(start, rot, t / dur);
-            yield return null;
-            t += Time.deltaTime;
-        }
-        target.rotation = rot;
-
-        _hasPlayerLaserCooledDown = true;
-    }
-    */
-
     void PlayerThrustersActivate(int coreTempIncrease)
     {
         
@@ -530,8 +553,6 @@ public class Player : MonoBehaviour
             _playerSpeed *= _speedMultiplier;
         }
     }
-
-
 
     // Player Fire Laser Logic
     void PlayerFiresLaser()
@@ -559,7 +580,7 @@ public class Player : MonoBehaviour
                     Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, currentBulletAngle - centeringOffset));
                     GameObject playerLaser = Instantiate(_playerMultiShotLaserPrefab, laserPx, rotation);
 
-                    playerLaser.transform.parent = _spawnManager.playerLaserContainer.transform;
+                    playerLaser.transform.parent = _spawnManager.PlayerLaserContainer.transform;
 
                     _hasPlayerLaserCooledDown = false;
                     StartCoroutine(PlayerLaserCoolDownTimer());
@@ -575,7 +596,7 @@ public class Player : MonoBehaviour
                 Vector3 laserPx = _laserNode1.transform.position;
                 GameObject playerLaser = Instantiate(_playerDoubleShotLaserPrefab, laserPx, transform.rotation);
 
-                playerLaser.transform.parent = _spawnManager.playerLaserContainer.transform;
+                playerLaser.transform.parent = _spawnManager.PlayerLaserContainer.transform;
 
                 _hasPlayerLaserCooledDown = false;
                 StartCoroutine(PlayerLaserCoolDownTimer());
@@ -589,7 +610,8 @@ public class Player : MonoBehaviour
                 Instantiate(_playerLateralLaserPrefab, new Vector3(transform.position.x + 0.576f, transform.position.y + 0.054f, transform.position.z), rotationRight);
             }
 
-            PlayClip(_playerLaserShotAudioClip);
+            _audioManager.PlayAudioClip(2); // plays Laser audio clip
+
         }
     }
 
@@ -605,7 +627,20 @@ public class Player : MonoBehaviour
         _hasPlayerLaserCooledDown = true;
     }
 
-    
+
+
+    private void FireHomingMissile()
+    {
+        Vector3 laserPx = _laserNode1.transform.position;
+        GameObject playerMissile = Instantiate(_playerHomingMissilePrefab, laserPx, transform.rotation);
+
+        playerMissile.transform.parent = _spawnManager.PlayerLaserContainer.transform;
+
+        _homingMissileCount--;
+        _uiManager.UpdateHomingMissileCount(_homingMissileCount);
+    }
+
+
 
     // Player Damage Logic
     public void Damage()
@@ -619,20 +654,20 @@ public class Player : MonoBehaviour
                 case 1:
                     _playerShieldAlpha = 0.75f;
                     _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
-                    StopDialogueAudio();
-                    PlayClip(_playerShields65AudioClip);
+                    _audioManager.StopDialogueAudio();
+                    _audioManager.PlayAudioClip(6); // play Shield 65% audio clip
                     break;
                 case 2:
                     _playerShieldAlpha = 0.40f;
                     _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
-                    StopDialogueAudio();
-                    PlayClip(_playerShields35AudioClip);
+                    _audioManager.StopDialogueAudio();
+                    _audioManager.PlayAudioClip(7); // plays Shield 35% audio clip
                     break;
                 case 3:
                     _isPlayerShieldsActive = false;
                     _playerShield.SetActive(false);
-                    StopDialogueAudio();
-                    PlayClip(_playerShieldsDepletedAudioClip);
+                    _audioManager.StopDialogueAudio();
+                    _audioManager.PlayAudioClip(8); // play Shield Depleted audio clip
                     break;
             }
             return;
@@ -657,7 +692,9 @@ public class Player : MonoBehaviour
             _gameManager.UpdateLivesRemaining(_playerLives);
             _camera.StartDamageCameraShake(0.2f, 0.35f);
             Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
-            PlayClip(_explosionSoundEffect);
+            _audioManager.PlayAudioClip(9); // plays explosion sound effect
+
+
 
             //if (_gameManager.lives != 0)
             if (_playerLives != 0)
@@ -689,7 +726,10 @@ public class Player : MonoBehaviour
             ResetStateOfCore();
             _spawnManager.OnPlayerDeath();
             Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
+            _player.SetActive(false);
+            isPlayerAlive = false;
+
+            //Destroy(this.gameObject);
         }
     }
 
@@ -699,7 +739,8 @@ public class Player : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().enabled = false;
         }
-        GetComponent<BoxCollider2D>().enabled = false;
+        GetComponent<BoxCollider2D>().enabled = false; 
+
         _playerSpeed = 0;
         _hasPlayerLaserCooledDown = false;
         canPlayerUseThrusters = false;
@@ -709,7 +750,7 @@ public class Player : MonoBehaviour
 
         _uiManager.ReadySetGo();
         yield return new WaitForSeconds(0.8f);
-        transform.position = new Vector3(0, -4.5f, 0); // Player returns to default start position
+        transform.position = new Vector3(0, -3.7f, 0); // Player returns to default start position
         GetComponent<SpriteRenderer>().enabled = true;
 
         yield return new WaitForSeconds(3.2f);
@@ -722,6 +763,8 @@ public class Player : MonoBehaviour
         }
 
         GetComponent<BoxCollider2D>().enabled = true;
+
+
         _playerSpeed = 5.0f;
 
         if (_gameFirstStart == true && _isAsteroidDestroyed == false)
@@ -753,7 +796,8 @@ public class Player : MonoBehaviour
 
     public void ResetStateOfCore()
     {
-        _endOfLevelDialogue.StopDialogueAudio();
+        _audioManager.StopDialogueAudio();
+
         transform.rotation = Quaternion.identity;
         _uiManager.CoreTempStable(false);
         _uiManager.CoreTempWarning(false);
@@ -771,33 +815,6 @@ public class Player : MonoBehaviour
         _uiManager.UpdateScore(_playerScore);
     }
 
-    // ----------------------------------------------------------------------------
-    // Name	:	PowerUp Collected Audio Dialogue & Other SFX
-    // Desc	:	Called when the Player collects a Power Up
-    // ----------------------------------------------------------------------------
-
-    public void PlayPowerUpDialogue(AudioClip powerUpDialogueClip)
-    {
-        if (powerUpDialogueClip != null)
-        {
-            //_audioSource.PlayOneShot(powerUpDialogueClip);
-            AudioSource.PlayClipAtPoint(powerUpDialogueClip, new(0, 0, -10), _gameManager.SFXPwrUpVolume);
-        }
-    }
-
-    public void StopDialogueAudio()
-    {
-        _audioSource.Stop();
-       
-    }
-
-    public void PlayClip(AudioClip soundEffectClip)
-    {
-        if (soundEffectClip != null)
-        {
-            _audioSource.PlayOneShot(soundEffectClip, 1.0f); // 1.0f is the volume component.  Need to attach it to Audio Mixer....
-        }
-    }
 
     // ----------------------------------------------------------------------------
     // Name	:	PowerUp Collected
@@ -806,11 +823,6 @@ public class Player : MonoBehaviour
     public void MultiShotActivate()
     {
         _isPlayerMultiShotActive = true;
-        Debug.Log("Multi Shot collected!");
-        //_endOfLevelDialogue.PlayPowerUpDialogue(_multiShotCollected);
-        PlayPowerUpDialogue(_multiShotCollected);
-
-
         StartCoroutine(MultiShotCoolDownTimer());
     }
 
@@ -825,9 +837,6 @@ public class Player : MonoBehaviour
         if (_isPlayerSpeedBoostActive == false) // only give the Player a temp speed boost if the PowerUp is not already collected
         {
             _isPlayerSpeedBoostActive = true;
-            //_endOfLevelDialogue.PlayPowerUpDialogue(_speedBoostCollected);
-            PlayPowerUpDialogue(_speedBoostCollected);
-
             _playerSpeed *= _speedMultiplier;
             StartCoroutine(SpeedBoostPowerDownTimer());
         }
@@ -847,10 +856,6 @@ public class Player : MonoBehaviour
     public void ShieldsActivate()
     {
         _isPlayerShieldsActive = true;
-        //_endOfLevelDialogue.PlayPowerUpDialogue(_playerShields100AudioClip);
-        PlayPowerUpDialogue(_playerShields100AudioClip);
-
-
         _playerShield.SetActive(true);
         _shieldHits = 0;
         _playerShieldAlpha = 1.0f;
@@ -859,10 +864,6 @@ public class Player : MonoBehaviour
 
     public void PlayerRegularAmmo(int ammoCollected)
     {
-        //Debug.Log("Ammo collected!");
-        //_endOfLevelDialogue.PlayPowerUpDialogue(_ammunitionCollected);
-
-        PlayPowerUpDialogue(_ammunitionCollected);
         _ammoCount += ammoCollected;
         UpdatePlayerAmmoStores();
     }
@@ -873,24 +874,38 @@ public class Player : MonoBehaviour
         {
             _ammoCount = 0;
         }
-        else if (_ammoCount > 25)
+        else if (_ammoCount > _maxAmmoStores)
         {
-            _ammoCount = 25;
+            _ammoCount = _maxAmmoStores;
         }
 
+        _uiManager.SetMaxAmmoCount(_maxAmmoStores);
         _uiManager.UpdateAmmoCount(_ammoCount);
     }
 
     public void PlayerHomingMissiles(int homingMissilesCollected)
     {
-        Debug.Log("Homing Missiles collected!");
-        //_endOfLevelDialogue.PlayPowerUpDialogue(_homingMissilesCollected);
-        PlayPowerUpDialogue(_homingMissilesCollected);
         _homingMissileCount += homingMissilesCollected;
+        _isPlayerHomingMissilesActivate = true;
+        UpdatePlayerMissileStores();
+    }
+
+    public void UpdatePlayerMissileStores()
+    {
+        if (_homingMissileCount < 0)
+        {
+            _homingMissileCount = 0;
+        }
+        else if (_homingMissileCount > _maxMissileStores)
+        {
+            _homingMissileCount = _maxMissileStores;
+        }
+
+        _uiManager.SetMaxMissileCount(_maxMissileStores);
         _uiManager.UpdateHomingMissileCount(_homingMissileCount);
     }
 
-    public void LateralLaserShotActive()
+        public void LateralLaserShotActive()
     {
         if (_isPlayerLateralLaserActive == false) // equips Player with lateral laser canons and starts the power down timer.
         {
@@ -910,12 +925,7 @@ public class Player : MonoBehaviour
             _lateralLaserCanonRight.SetActive(true);
             StartLateralLaserTimerCoroutine();
         }
-
-        //_endOfLevelDialogue.PlayPowerUpDialogue(_lateralLaserCollected);
-        PlayPowerUpDialogue(_lateralLaserCollected);
     }
-
-
 
     public void StartLateralLaserTimerCoroutine() // starts the coroutine to power down lateral laser canons after 15 seconds
     {
@@ -932,8 +942,6 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(15.0f);
         DropLateralLaserCanons();
     }
-
-
 
     public void DropLateralLaserCanons()
     {
@@ -953,10 +961,6 @@ public class Player : MonoBehaviour
 
     public void HealthBoostActivate()
     {
-        //_endOfLevelDialogue.PlayPowerUpDialogue(_shipRepairsUnderwayAudioClip);
-        PlayPowerUpDialogue(_shipRepairsUnderwayAudioClip);
-
-
         // Reverses damage by removing random (if more than 1 active) damages area and returning it to the pool.
         if (activatedDamageAnimations.Count > 0)
         {
@@ -970,7 +974,93 @@ public class Player : MonoBehaviour
 
     public void NegativePowerUpCollision()
     {
-        Debug.Log("Collided with Negative PU!");
+        int _itemLost = Random.Range(0, 4);
+
+        switch (_itemLost)
+        {
+            case 0:
+                LoseAmmo();
+                break;
+            case 1:
+                LoseMissiles();
+                break;
+            case 2:
+                _coreOnline = false;
+                StartCoroutine(LoseCore());
+                break;
+            case 3:
+                LoseShields();
+                break;
+        }
+    }
+
+    void LoseAmmo()
+    {
+        _ammoCount -= (Random.Range(5, 10));
+
+        if (_ammoCount < 0)
+        {
+            _ammoCount = 0;
+        }
+        _uiManager.UpdateAmmoCount(_ammoCount);
+    }
+
+    void LoseMissiles()
+    {
+        _homingMissileCount -= (Random.Range(1, 10));
+        if (_homingMissileCount < 0)
+        {
+            _homingMissileCount = 0;
+            _isPlayerHomingMissilesActivate = false;
+        }
+        _uiManager.UpdateHomingMissileCount(_homingMissileCount);
+    }
+
+    IEnumerator LoseCore()
+    {
+        transform.Rotate(Vector3.forward * -50f * Time.deltaTime);
+        _hasPlayerLaserCooledDown = false;
+        canPlayerUseThrusters = false;
+        _playerThrusterLeft.gameObject.SetActive(false);
+        _playerThrusterRight.gameObject.SetActive(false);
+        _playerSpeed = 0.15f;
+
+        //yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(Random.Range(3f, 6f));
+
+        canPlayerUseThrusters = true;
+        _playerThrusterLeft.gameObject.SetActive(true);
+        _playerThrusterRight.gameObject.SetActive(true);
+        _playerSpeed = 5.0f;
+
+        if (transform.rotation.z != 0)
+        {
+            StartCoroutine(RotatePlayerUp(this.transform, Quaternion.identity, 1f));
+        }
+
+        _coreOnline = true;
+    }
+
+    void LoseShields()
+    {
+        _isPlayerShieldsActive = false;
+        _audioManager.PlayAudioClip(8);
+        _playerShield.SetActive(false);
+    }
+
+    IEnumerator RotatePlayerUp(Transform target, Quaternion rot, float dur)
+    {
+        float t = 0f;
+        Quaternion start = target.rotation;
+        while (t < dur)
+        {
+            target.rotation = Quaternion.Slerp(start, rot, t / dur);
+            yield return null;
+            t += Time.deltaTime;
+        }
+        target.rotation = rot;
+
+        _hasPlayerLaserCooledDown = true;
     }
 
 }

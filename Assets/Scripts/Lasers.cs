@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 public class Lasers : MonoBehaviour
@@ -18,16 +19,23 @@ public class Lasers : MonoBehaviour
                                   _isEnemyArcLaser = false;
 
     [SerializeField] private bool _playSound = true;
-    [SerializeField] private AudioSource _audioSource;
-    [SerializeField] private AudioClip _playerLaserAudioClip;
-    [SerializeField] private AudioClip _enemyLaserBasicAudioClip;
+    [SerializeField] private AudioManager _audioManager;
+ //   [SerializeField] private AudioSource _audioSource;
+ //   [SerializeField] private AudioClip _playerLaserAudioClip;
+ //   [SerializeField] private AudioClip _enemyLaserBasicAudioClip;
 
-    private void Start()
+    //private Rigidbody _rigidbody;
+
+    void Start()
     {
+        //_rigidbody = GetComponent<Rigidbody>();
+
         _player = GameObject.Find("Player").GetComponent<Player>();
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        _audioSource = GetComponent<AudioSource>();
+        _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+
+        //    _audioSource = GetComponent<AudioSource>();
 
         if (_player == null)
         {
@@ -39,6 +47,7 @@ public class Lasers : MonoBehaviour
             Debug.LogError("The SpawnManager is null.");
         }
 
+        /*
         if (_audioSource == null)
         {
             Debug.LogError("The AudioSource on the Lasers script is NULL!");
@@ -46,6 +55,12 @@ public class Lasers : MonoBehaviour
         else
         {
             _audioSource.clip = _playerLaserAudioClip; // default
+        }
+        */
+
+        if (_audioManager == null)
+        {
+            Debug.LogError("The Laserd : Audio Manager is null.");
         }
 
         _playerLaserSpeed = _gameManager.currentPlayerLaserSpeed;
@@ -84,13 +99,15 @@ public class Lasers : MonoBehaviour
         }
     }
 
+    /*
     public void PlayClip(AudioClip soundEffectClip)
     {
         if (soundEffectClip != null)
         {
-            _audioSource.PlayOneShot(soundEffectClip);
+            _audioManager.PlayAudioClip(9);
         }
     }
+    */
 
     void PlayLaserAudioClip()
     {
@@ -98,12 +115,14 @@ public class Lasers : MonoBehaviour
         {
             if (_isPlayerLaser == true || _isPlayerLateralLaser == true)
             {
-                PlayClip(_playerLaserAudioClip);
+                //PlayClip(_playerLaserAudioClip);
+                _audioManager.PlayAudioClip(10);
             }
 
             if (_isEnemyLaser == true || _isEnemyRearShootingLaser == true || _isEnemyArcLaser == true)
             {
-                PlayClip(_enemyLaserBasicAudioClip);
+                //PlayClip(_enemyLaserBasicAudioClip);
+                _audioManager.PlayAudioClip(11);
             }
         }
         _playSound = false;
@@ -136,7 +155,7 @@ public class Lasers : MonoBehaviour
     void DestroyObjectsOutsideRadius()
     {
         Vector3 worldCenter = Vector3.zero;
-        float radius = _spawnManager.radius;
+        float radius = _spawnManager.Radius;
         if (Vector3.Distance(transform.position, worldCenter) > radius)
         {
             if (transform.parent != null)
@@ -150,7 +169,10 @@ public class Lasers : MonoBehaviour
             }
 
             PlayLaserAudioClip();
-            Destroy(this.gameObject, 5.0f);
+
+            CleanUpContainers();
+
+            //Destroy(this.gameObject, 5.0f);
         }
     }
 
@@ -165,7 +187,7 @@ public class Lasers : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other) // *********************************************
     {
         if (other.CompareTag("Player") && _isEnemyLaser == true || other.CompareTag("Player") && _isEnemyRearShootingLaser == true)
         {
@@ -209,19 +231,6 @@ public class Lasers : MonoBehaviour
         if (other.CompareTag("Enemy") && _isPlayerLaser == true || other.CompareTag("Enemy") && _isPlayerLateralLaser == true)
         {
             CleanUpContainers();
-            /*
-            if (transform.parent != null)
-            {
-                Destroy(transform.parent.gameObject);
-            }
-
-            if (transform.parent == null)
-            {
-                Destroy(this.gameObject);
-            }
-
-            Destroy(this.gameObject);
-            */
         }
 
         if (other.CompareTag("PowerUpsBasic") && _isPlayerLaser == true || other.CompareTag("PowerUpsBasic") && _isPlayerLateralLaser == true)

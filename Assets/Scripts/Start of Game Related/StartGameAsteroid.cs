@@ -13,9 +13,10 @@ public class StartGameAsteroid : MonoBehaviour
     private SpawnManager _spawnManager;
     private Player _player;
 
-    private void Start()
+
+    void Start()
     {
-        _asteroidSpeed = 2.0f;
+        _asteroidSpeed = 1.75f;
 
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
@@ -41,12 +42,12 @@ public class StartGameAsteroid : MonoBehaviour
     {
         transform.Translate(Vector3.down * _asteroidSpeed * Time.deltaTime);
 
-        if (transform.position.y <= 7.0f)
+        if (transform.position.y <= 5f)
         {
-            transform.position = new Vector3(transform.position.x, 7.0f, 0);
+            transform.position = new Vector3(transform.position.x, 5f, 0f);
         }
 
-        if (transform.position.y <= 7.0f && _startOfGame == true)
+        if (transform.position.y <= 5f && _startOfGame == true)
         {
             SpaceCommandDestroyAsteroid();
         }
@@ -56,18 +57,22 @@ public class StartGameAsteroid : MonoBehaviour
     {
         _startOfGame = false;
         _player.AsteroidBlockingSensors();
+        Debug.Log("Done giving order to destroy asteroid!");
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "LaserPlayer" || other.tag == "HomingMissilePlayer")
+        Debug.Log("1 - Start game asteroid hit!");
+
+        if (other.CompareTag("LaserPlayer") || other.CompareTag("PlayerHomingMissile"))
         {
-            if (_spawnManager.asteroidHit == false)
+            Debug.Log("2 - Start game asteroid hit!");
+            if (_spawnManager.AsteroidHit == false)
             {
                 //_spawnManager.asteroidHit = true; // prevents second (or multi shot) player laser to be detected.  Only the first trigger gets reported.
                 _spawnManager.StartGameAsteroidDestroyed();
                 GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-                explosion.transform.parent = _spawnManager.explosionContainer.transform;
+                explosion.transform.parent = _spawnManager.ExplosionContainer.transform;
 
                 _player.AsteroidDestroyed();
 
@@ -78,8 +83,8 @@ public class StartGameAsteroid : MonoBehaviour
                     }
                 }
                 Destroy(other.gameObject);
-                Destroy(GetComponent<Rigidbody2D>());
-                Destroy(GetComponent<BoxCollider2D>());
+                Destroy(GetComponent<Rigidbody>());
+                Destroy(GetComponent<CapsuleCollider>());
                 //Destroy(this.gameObject, 2.5f);
 
             }

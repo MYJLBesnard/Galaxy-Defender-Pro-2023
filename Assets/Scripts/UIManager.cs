@@ -7,10 +7,13 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameManager _gameManager;
-    [SerializeField] private FadeEffect _fadeEffect;
+    [SerializeField] private SpawnManager _spawnManager;
     [SerializeField] private Player _player;
     [SerializeField] private BoxCollider2D _playerBoxCollider2D;
-    [SerializeField] private SpawnManager _spawnManager;
+    [SerializeField] private FadeEffect _fadeEffect;
+    [SerializeField] private int _maxAmmoStoresUI;
+    [SerializeField] private int _maxMissileStoresUI;
+
 
     [Header("UI Images")]
     [SerializeField] private Sprite[] _livesSprite;
@@ -62,11 +65,11 @@ public class UIManager : MonoBehaviour
         _newGame.gameObject.SetActive(false);
         _quitToCredits.gameObject.SetActive(false);
 
-        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _fadeEffect = GameObject.Find("CanvasFader").GetComponent<FadeEffect>();
         _player = GameObject.Find("Player").GetComponent<Player>();
         _playerBoxCollider2D = GameObject.Find("Player").GetComponent<BoxCollider2D>();
-        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
 
         if (_gameManager == null)
         {
@@ -132,20 +135,30 @@ public class UIManager : MonoBehaviour
         _scoreText.text = "SCORE: " + playerScore.ToString();
     }
 
+    public void SetMaxAmmoCount(int maxAmmo)
+    {
+        _maxAmmoStoresUI = maxAmmo;
+    }
+
+    public void SetMaxMissileCount(int maxMissiles)
+    {
+        _maxMissileStoresUI = maxMissiles;
+    }
+
     public void UpdateAmmoCount(int ammoCount)
     {
-        _ammoCountText.text = "AMMO: " + ammoCount.ToString() + "/25";
+        _ammoCountText.text = "AMMO: " + ammoCount.ToString() + "/" + _maxAmmoStoresUI;
 
-        if (ammoCount > 15)
+        if (ammoCount > (_maxAmmoStoresUI * 0.66))
         {
             _ammoCountText.color = Color.green;
         }
 
-        else if (ammoCount <= 15 && ammoCount > 5)
+        else if (ammoCount <= (_maxAmmoStoresUI * 0.66) && ammoCount > (_maxAmmoStoresUI * 0.33))
         {
             _ammoCountText.color = Color.yellow;
         }
-        else if (ammoCount <= 5)
+        else if (ammoCount <= (_maxAmmoStoresUI * 0.33))
         {
             _ammoCountText.color = Color.red;
         }
@@ -153,17 +166,17 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHomingMissileCount(int homingMissileCount)
     {
-        _homingMissileCountText.text = "Missiles: " + homingMissileCount.ToString() + "/25";
+        _homingMissileCountText.text = "Missiles: " + homingMissileCount.ToString() + "/" + _maxMissileStoresUI;
 
-        if (homingMissileCount > 15)
+        if (homingMissileCount > (_maxMissileStoresUI * 0.66))
         {
             _homingMissileCountText.color = Color.green;
         }
-        else if (homingMissileCount <= 15 && homingMissileCount > 5)
+        else if (homingMissileCount <= (_maxMissileStoresUI * 0.66) && homingMissileCount > (_maxMissileStoresUI * 0.33))
         {
             _homingMissileCountText.color = Color.yellow;
         }
-        else if (homingMissileCount <= 5)
+        else if (homingMissileCount <= (_maxMissileStoresUI * 0.33))
         {
             _homingMissileCountText.color = Color.red;
         }
@@ -219,15 +232,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /*
     public void ContinueOption()
     {
         continueOptionTxt.gameObject.SetActive(true);
         playerDecidesYes.gameObject.SetActive(true);
         playerDecidesNo.gameObject.SetActive(true);
     }
-    */
-
 
     public void ContinueOptionTxt()
     {
@@ -242,8 +252,6 @@ public class UIManager : MonoBehaviour
         playerDecidesYes.gameObject.SetActive(false);
         playerDecidesNo.gameObject.SetActive(false);
     }
-
-
 
     private void GameOverSequence()
     {
@@ -296,7 +304,9 @@ public class UIManager : MonoBehaviour
 
     IEnumerator CountDownToDefend()
     {
-        _playerBoxCollider2D.GetComponent<BoxCollider2D>().enabled = false;
+        //_playerBoxCollider2D.GetComponent<BoxCollider2D>().enabled = false;
+        //_playerBoxCollider2D.GetComponent<BoxCollider>().enabled = false;
+
         _spawnManager.OnPlayerReset();
 
         yield return new WaitForSeconds(0.25f);
@@ -312,7 +322,7 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         _defendText.gameObject.SetActive(false);
 
-        _playerBoxCollider2D.GetComponent<BoxCollider2D>().enabled = true;
+        //_playerBoxCollider2D.GetComponent<BoxCollider2D>().enabled = true;
     }
 
     public void WeaponsFreeMsg()

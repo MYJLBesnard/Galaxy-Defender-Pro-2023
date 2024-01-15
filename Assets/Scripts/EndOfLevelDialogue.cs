@@ -11,12 +11,15 @@ public class EndOfLevelDialogue : MonoBehaviour
     public bool PlayOnAwake = false;
     public bool Loop = false;
 
-    public bool LastLevel = false;
-    public bool PlayerAcceptsMsn = true;
+    
     public bool Rookie = true;
     public bool SpaceCadet = false;
     public bool SpaceCaptain = false;
     public bool GalaxyDefender = false;
+
+
+    public bool LastLevel = false;
+    public bool PlayerAcceptsMsn = true;
     public bool MsgDonePlaying = false;
     public bool PowerUpAudioIsBossDefeated = false;
 
@@ -50,7 +53,6 @@ public class EndOfLevelDialogue : MonoBehaviour
     //public AudioClip[] PowerUpAudioClips;
     //[SerializeField] private AudioClip _powerUpAudioClip = null;
 
-    // Start is called before the first frame update
     void Start()
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();

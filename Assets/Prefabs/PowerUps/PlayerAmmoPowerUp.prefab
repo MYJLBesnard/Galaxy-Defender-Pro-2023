@@ -108,12 +108,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5087452030651122748}
   - component: {fileID: 5087452030651122739}
-  - component: {fileID: 8196018351677747963}
-  - component: {fileID: 8905738446420623645}
   - component: {fileID: 5136295029813580111}
+  - component: {fileID: -600263259080389905}
+  - component: {fileID: -7197099336430736416}
   m_Layer: 0
   m_Name: PlayerAmmoPowerUp
-  m_TagString: PlayerPowerUps
+  m_TagString: PowerUpsWeapons
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,13 +149,25 @@ MonoBehaviour:
   _player: {fileID: 0}
   _spawnManager: {fileID: 0}
   _gameManager: {fileID: 0}
-  _endOfLevelDialogue: {fileID: 0}
-  _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b, type: 3}
+  _audioManager: {fileID: 0}
+  _explosionPrefab: {fileID: 3249331152572962051, guid: 30b1a0b9b567b4c89b5c0372c3e55742, type: 3}
   _powerUpSpeed: 0
   _isStartOfGamePwrUp: 0
   _powerUpID: 3
---- !u!58 &8196018351677747963
-CircleCollider2D:
+--- !u!114 &5136295029813580111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5087452030651122738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47c99ef8267884a7ba3fe5c819c98d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!70 &-600263259080389905
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -167,10 +179,10 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0012338161, y: -0.009977341}
-  serializedVersion: 2
-  m_Radius: 0.46219325
---- !u!50 &8905738446420623645
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.8, y: 0.8}
+  m_Direction: 0
+--- !u!50 &-7197099336430736416
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -191,15 +203,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &5136295029813580111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5087452030651122738}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47c99ef8267884a7ba3fe5c819c98d38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

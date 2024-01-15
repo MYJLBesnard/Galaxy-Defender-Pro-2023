@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 191767234627025651}
   - component: {fileID: 191767234627025648}
-  - component: {fileID: 2119279538}
+  - component: {fileID: 7419569122569009465}
   m_Layer: 0
   m_Name: Asteroid
   m_TagString: Enemy
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2119279538
+--- !u!114 &7419569122569009465
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,10 +94,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 191767234627025649}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99521835a0d92416c93a7d619fb556b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 51f9a76f28ec04058b261f3204c8ec18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _asteroid: {fileID: 0}
-  _asteroidSpeed: 0
-  _startOfGame: 1
-  _explosionPrefab: {fileID: 0}
+  _rotationSpeed: -4

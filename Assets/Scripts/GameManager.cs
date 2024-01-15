@@ -10,7 +10,7 @@ public class LevelInfo // Contains the game settings for a given level of the ga
 {
     public int LevelNumber = 1;  // Number of Level
     public string Name = null;  // Name of the Level
-    public int SizeOfWave = 10;  // How many enemy ships in the wave
+    public int SizeOfWave = 0;  // How many enemy ships in the wave
     public float PowerUpSpeed = 3.5f; // Default speed of Power Ups
     public float PlayerLaserSpeed = 8.0f; // Default speed of Player's laser
 
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _playerLivesRemaining = 3;
     [SerializeField] private bool _isGameOver = false;
     [SerializeField] private Player _player;
-    [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
+    [SerializeField] private AudioManager _audioManager;
 
     public int difficultyLevel = 1; // default difficulty level if not modified in Options Scene
     public int graphicQualityLevel = 1; // default graphic quality set to Low
@@ -57,7 +57,10 @@ public class GameManager : MonoBehaviour
     public int howManyLevels { get { return Waves.Count; } }
     public int currentLevelNumber { get { return Waves[_currentWave].LevelNumber; } }
     public string currentLevelName { get { return Waves[_currentWave].Name; } }
-    public int currentSizeOfWave { get { return Waves[_currentWave].SizeOfWave + difficultyLevel; } }
+
+    //public int currentSizeOfWave { get { return Waves[_currentWave].SizeOfWave + difficultyLevel; } }
+    public int currentSizeOfWave { get { return Waves[_currentWave].SizeOfWave; } }
+
     public float currentPowerUpSpeed { get { return Waves[_currentWave].PowerUpSpeed + (difficultyLevel / 2); } }
     public float currentPlayerLaserSpeed { get { return Waves[_currentWave].PlayerLaserSpeed + (difficultyLevel/2); } }
 
@@ -119,6 +122,7 @@ public class GameManager : MonoBehaviour
     {
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 
         if (_spawnManager == null)
         {
@@ -128,6 +132,11 @@ public class GameManager : MonoBehaviour
         if (_uiManager == null)
         {
             Debug.LogError("The UIManager is null.");
+        }
+
+        if (_audioManager == null)
+        {
+            Debug.LogError("The Audio MAnager is null.");
         }
 
         musicVolume = -10f;
@@ -141,6 +150,8 @@ public class GameManager : MonoBehaviour
             _music.loop = true;
             _music.volume = 0f;
         }
+
+        Debug.Log("Game Manager (Start): " + Waves.Count);
     }
 
     public void PlayMusic(int clip, float fade)
@@ -269,6 +280,7 @@ public class GameManager : MonoBehaviour
     {
         if (_currentWave < Waves.Count - 1)
             _currentWave++;
+        Debug.Log("Game Manager: Wave complete, current wave now: " + _currentWave);
     }
 
     public int DecreaseLives()
@@ -287,13 +299,19 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Y) && isBossDefeated == true)
         {
-            _endOfLevelDialogue.PlayerAcceptsMsn = true;
-            _endOfLevelDialogue.GeneratePlayerDecision();
+            //_endOfLevelDialogue.PlayerAcceptsMsn = true;
+            //_endOfLevelDialogue.GeneratePlayerDecision();
+
+            _audioManager.PlayerAcceptsMsn = true;
+            _audioManager.GeneratePlayerDecision();
         }
         if (Input.GetKeyDown(KeyCode.N) && isBossDefeated == true)
         {
-            _endOfLevelDialogue.PlayerAcceptsMsn = false;
-            _endOfLevelDialogue.GeneratePlayerDecision();
+            //_endOfLevelDialogue.PlayerAcceptsMsn = false;
+            //_endOfLevelDialogue.GeneratePlayerDecision();
+
+            _audioManager.PlayerAcceptsMsn = false;
+            _audioManager.GeneratePlayerDecision();
         }
     }
 
@@ -360,11 +378,13 @@ public class GameManager : MonoBehaviour
 
     public void DisplayContinueOptionText()
     {
-        if (_endOfLevelDialogue.MsgDonePlaying == true)
+        //if (_endOfLevelDialogue.MsgDonePlaying == true)
+        if (_audioManager.MsgDonePlaying == true)
         {
             //_player.ContinueOptionTxt();
             _uiManager.ContinueOptionTxt();
-            _endOfLevelDialogue.MsgDonePlaying = false; // resets value
+        //    _endOfLevelDialogue.MsgDonePlaying = false; // resets value
+            _audioManager.MsgDonePlaying = false; // resets value
         }
     }
 

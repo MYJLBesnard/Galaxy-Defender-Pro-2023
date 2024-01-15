@@ -7,8 +7,7 @@ public class PowerUps : MonoBehaviour
     [SerializeField] private Player _player;
     [SerializeField] private SpawnManager _spawnManager;
     [SerializeField] private GameManager _gameManager;
-    [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
-
+    [SerializeField] private AudioManager _audioManager;
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private float _powerUpSpeed;
     [SerializeField] private bool _isStartOfGamePwrUp = false;
@@ -23,17 +22,12 @@ public class PowerUps : MonoBehaviour
                                                 // 6 = Health (Ship Repairs)
                                                 // 7 = Negative PowerUp
 
-
-    //public AudioClip[] PowerUpAudioClips;
-    //[SerializeField] private AudioClip _powerUpAudioClip = null;
-
-
-    private void Start()
+    void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        _endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();
+        _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 
         if (_player == null)
         {
@@ -50,9 +44,9 @@ public class PowerUps : MonoBehaviour
             Debug.LogError("The PowerUps : GameManager is NULL.");
         }
 
-        if (_endOfLevelDialogue == null)
+        if (_audioManager == null)
         {
-            Debug.Log("Dialogue Player is NULL.");
+            Debug.LogError("The Audio MAnager is null.");
         }
     }
 
@@ -74,7 +68,6 @@ public class PowerUps : MonoBehaviour
         else
         {
             _powerUpSpeed = _gameManager.currentPowerUpSpeed;
-
         }
 
         transform.Translate(_powerUpSpeed * Time.deltaTime * Vector3.down);
@@ -92,81 +85,61 @@ public class PowerUps : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Player player = other.transform.GetComponent<Player>();
             //float SFXClipAtPointVol = _gameManager.SFXPwrUpVolume;
             //AudioSource.PlayClipAtPoint(_powerUpAudioClip, new (0,0,-10), _gameManager.SFXPwrUpVolume);
-            
-
-            if (player != null)
+          
+            if (_player != null)
             {
                 /*
-                if (_endOfLevelDialogue.PowerUpAudioIsBossDefeated == false)
+                if (_audioManager.PowerUpAudioIsBossDefeated == false)
                 {
-                    _endOfLevelDialogue.PlayPowerUpDialogue(_powerUpAudioClip);
+                    _audioManager.PlayPowerUpDialogue(_powerUpAudioClip);
                 }
                 */
-
+                
                 switch (_powerUpID)
                 {
                     case 0:
-                        player.MultiShotActivate();
-                        //_powerUpAudioClip = _endOfLevelDialogue.PowerUpAudioClips[_powerUpID];
+                        _player.MultiShotActivate();
                         break;
                     case 1:
-                        player.SpeedBoostActivate();
-                        //_powerUpAudioClip = _endOfLevelDialogue.PowerUpAudioClips[_powerUpID];
+                        _player.SpeedBoostActivate();
                         break;
                     case 2:
-                        player.ShieldsActivate();
-                        //_powerUpAudioClip = _endOfLevelDialogue.PowerUpAudioClips[_powerUpID];
+                        _player.ShieldsActivate();
                         break;
                     case 3:
-                        player.PlayerRegularAmmo(Random.Range(3,6));
-                        //_powerUpAudioClip = _endOfLevelDialogue.PowerUpAudioClips[_powerUpID];
+                        _player.PlayerRegularAmmo(Random.Range(3,6));
                         break;
                     case 4:
-                        player.PlayerHomingMissiles(5);
-                        //_powerUpAudioClip = _endOfLevelDialogue.PowerUpAudioClips[_powerUpID];
+                        _player.PlayerHomingMissiles(5);
                         break;
                     case 5:
-                        player.LateralLaserShotActive();
-                        //_powerUpAudioClip = _endOfLevelDialogue.PowerUpAudioClips[_powerUpID];
+                        _player.LateralLaserShotActive();
                         break;
                     case 6:
-                        player.HealthBoostActivate();
-                        //_powerUpAudioClip = _endOfLevelDialogue.PowerUpAudioClips[_powerUpID];
+                        _player.HealthBoostActivate();
                         break;
                     case 7:
-                        player.NegativePowerUpCollision();
-                        //_powerUpAudioClip = _endOfLevelDialogue.PowerUpAudioClips[_powerUpID];
+                        _player.NegativePowerUpCollision();
                         break;
                     default:
                         break;
                 }
+
+                _audioManager.PlayPowerUpDialogue(_powerUpID);
+
             }
 
-            //AudioSource.PlayClipAtPoint(_powerUpAudioClip, new(0, 0, -10), _gameManager.SFXPwrUpVolume);
-
-            //AudioSource.PlayClipAtPoint(_powerUpAudioClip, transform.position);
-
             Destroy(this.gameObject);
         }
 
-        if (other.CompareTag("LaserPlayer"))
+        if (_powerUpID != 7)
         {
-            GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-            explosion.transform.parent = _spawnManager.explosionContainer.transform;
-
-            Destroy(other.gameObject);
-            Destroy(this.gameObject);
-        }
-
-        if (other.CompareTag("LaserEnemy"))
-        {
-            if (_powerUpID != 7)
+            if (other.CompareTag("LaserPlayer") || other.CompareTag("LaserEnemy"))
             {
                 GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-                explosion.transform.parent = _spawnManager.explosionContainer.transform;
+                explosion.transform.parent = _spawnManager.ExplosionContainer.transform;
 
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);

@@ -12,6 +12,10 @@ TagManager:
   - Asteroid
   - PlayerPowerUps
   - PowerUpsWeapons
+  - PlayerHomingMissile
+  - NegativePowerUp
+  - EnemyLaser
+  - LaserDoubleShotEnemy
   layers:
   - Default
   - TransparentFX
@@ -20,9 +24,9 @@ TagManager:
   - Water
   - UI
   - Post Processing
-  - 
-  - 
-  - 
+  - Layer 1
+  - Layer 2
+  - Layer 3
   - 
   - 
   - 
